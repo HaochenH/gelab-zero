@@ -48,6 +48,7 @@ You can contact us and communicate with us by joining our WeChat group:
 
 
 
+
 ## 📖 Background
 
 As AI experiences increasingly penetrate consumer-grade devices, Mobile Agent research is at a critical juncture: transitioning from **"feasibility verification"** to **"large-scale application."** While GUI-based solutions offer universal compatibility, the fragmentation of mobile ecosystems imposes heavy engineering burdens that hinder innovation. GELab-Zero is designed to dismantle these barriers.

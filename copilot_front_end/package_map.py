@@ -209,7 +209,7 @@ package_name_map = {
     "osmAnd": "net.osmand",
     "给到": "com.guanaitong",
     "百词斩": "com.jiongji.andriod.card",
-
+    "企查查": "com.android.icredit",
 }
 
 import difflib 
