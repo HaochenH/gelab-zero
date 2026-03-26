@@ -178,14 +178,46 @@ def evaluate_task_on_device(agent_server, device_info, task, rollout_config, ext
 
         history_actions.append(action)
 
+        if action['action_type'].upper() not in ['COMPLETE', "ABORT"]:
+            time.sleep(delay_after_capture)
+            after_image_path = capture_screenshot(device_id, "tmp_screenshot_after", print_command=False)
+            after_image_b64_url = make_b64_url(after_image_path, resize_config=rollout_config['model_config'].get("resize_config", None))
+            smart_remove(after_image_path)
+            
+            update_payload = {
+                "session_id": session_id,
+                "update_step": True,
+                "after_screenshot": {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": after_image_b64_url
+                    }
+                }
+            }
+            agent_server.automate_step(update_payload)
+        else:
+            after_image_path = capture_screenshot(device_id, "tmp_screenshot_after", print_command=False)
+            after_image_b64_url = make_b64_url(after_image_path, resize_config=rollout_config['model_config'].get("resize_config", None))
+            smart_remove(after_image_path)
+            
+            update_payload = {
+                "session_id": session_id,
+                "update_step": True,
+                "after_screenshot": {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": after_image_b64_url
+                    }
+                }
+            }
+            agent_server.automate_step(update_payload)
+
 
         print(f"Step {step_idx+1}/{max_steps} done. Action: {action}")
 
         if action['action_type'].upper() in ['COMPLETE', "ABORT"]:
             stop_reason = action['action_type'].upper()
             break
-
-        time.sleep(delay_after_capture)
     
     if action['action_type'] in ['COMPLETE', "ABORT"]:
         stop_reason = action['action_type']
@@ -202,5 +234,3 @@ def evaluate_task_on_device(agent_server, device_info, task, rollout_config, ext
     print(f"Task {task} done in {len(history_actions)} steps. Session ID: {session_id}")
 
     return return_log
-
-

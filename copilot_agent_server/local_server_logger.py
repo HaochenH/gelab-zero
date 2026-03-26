@@ -74,6 +74,26 @@ class LocalServerLogger(BaseLogger):
         if is_print:
             print(json.dumps(log_message, indent=2, ensure_ascii=False))
 
+    def update_log(self, log_index, new_log, is_print: bool = False):
+        """
+        Update a specific log entry by index.
+        """
+        logs = self.read_logs()
+        
+        if log_index < 0 or log_index >= len(logs):
+            raise ValueError(f"Invalid log index: {log_index}")
+        
+        logs[log_index] = new_log
+        
+        # Rewrite the entire file with updated logs
+        with smart_open(self.log_target_file, 'w', encoding='utf-8') as f:
+            writer = jsonlines.Writer(f)
+            for log in logs:
+                writer.write(log)
+        
+        if is_print:
+            print(json.dumps(new_log, indent=2, ensure_ascii=False))
+
     def save_image(self, image: Image.Image, image_name: str) -> str:
         """
         Save a PIL Image to the image directory with the given image name.
@@ -92,4 +112,3 @@ class LocalServerLogger(BaseLogger):
             f.write(image_data)
 
         return image_path
-

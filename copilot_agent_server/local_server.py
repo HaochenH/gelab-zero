@@ -30,7 +30,6 @@ class LocalServer(BaseCopilotServer):
 
         self.debug = server_config.get("debug", False)
         
-
     
     def get_session(self, payload: dict) -> str:
         """
@@ -84,6 +83,21 @@ class LocalServer(BaseCopilotServer):
 
         logs = logger.read_logs()
         assert len(logs) > 0, f"No logs found for session_id {session_id}"
+        
+        if payload.get("update_step", False):
+            last_log_idx = len(logs) - 1
+            last_log = logs[last_log_idx]
+            msg = last_log['message']
+            
+            if "after_screenshot" in payload:
+                after_image_url = payload['after_screenshot']['image_url']['url']
+                after_image = read_from_url(after_image_url)
+                after_image_inner_url = logger.save_image(after_image, f"step_{last_log_idx}_after")
+                msg['after_image'] = after_image_inner_url
+            
+            logger.update_log(last_log_idx, last_log, is_print=self.debug)
+            return {"status": "updated", "step": last_log_idx}
+
         current_ste = len(logs) - 1
 
         config_log = logs[0]

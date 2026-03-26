@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gelab-zero Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">✨</span>
+                <h1>gelab-zero</h1>
+            </div>
+            <div class="sidebar-header">
+                <h3>Recent Sessions</h3>
+            </div>
+            <div id="history-list" class="sidebar-history-list">
+                <!-- History items will be injected here -->
+            </div>
+            <div class="device-status">
+                <div class="status-indicator online"></div>
+                <span id="device-id-display">Device Ready</span>
+            </div>
+        </aside>
+
+        <section class="content-area">
+            <div id="tab-dashboard" class="tab-content active">
+
+                <div class="input-card glass">
+                    <textarea id="task-input" placeholder=""></textarea>
+                    <div class="card-footer">
+                        <button id="run-btn" class="primary-btn">
+                            <span class="btn-text">Execute Task</span>
+                            <span class="btn-loader"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="execution-view" class="execution-view hidden">
+                    <div class="status-banner glass">
+                        <div class="status-msg">
+                            <div class="status-left">
+                                <span id="current-status-badge" class="badge">Running</span>
+                                <h3 id="current-task-name">Task Name</h3>
+                            </div>
+                            <button id="stop-btn" class="secondary-btn danger hidden">
+                                Stop
+                            </button>
+                        </div>
+                        <div class="progress-container">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                    </div>
+
+                    <div class="logs-container glass">
+                        <div class="logs-header">
+                            <h4>Session Logs</h4>
+                            <span id="step-counter">Step 0</span>
+                        </div>
+                        <div id="log-list" class="log-list">
+                            <!-- Logs will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Modal for session details -->
+    <div id="session-modal" class="modal hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3 id="modal-title">Session Details</h3>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Session logs for history -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
