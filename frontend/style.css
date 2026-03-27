@@ -184,6 +184,8 @@ body {
     flex: 1;
     padding: 2.5rem;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .content-header {
@@ -201,30 +203,51 @@ body {
 
 .tab-content {
     display: none;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .tab-content.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Input Card */
 .input-card {
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    padding: 1rem;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.input-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.input-row textarea {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.input-row .primary-btn {
+    flex-shrink: 0;
+    height: 100%;
+    min-height: 80px;
 }
 
 textarea {
     width: 100%;
-    min-height: 120px;
+    min-height: 80px;
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 1rem;
+    padding: 0.75rem;
     color: var(--text-main);
     font-family: inherit;
-    font-size: 1.1rem;
+    font-size: 1rem;
     resize: none;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     transition: var(--transition);
 }
 
@@ -234,11 +257,16 @@ textarea:focus {
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .primary-btn {
     background: var(--primary);
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
+    padding: 0.6rem 1.2rem;
     border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
@@ -379,8 +407,19 @@ textarea:focus {
 
 .log-content {
     display: flex;
-    gap: 1rem;
-    flex-direction: column;
+    gap: 1.5rem;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.log-content .screenshots-wrapper {
+    flex-shrink: 0;
+    width: 220px;
+}
+
+.log-content .text-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .screenshots-wrapper {

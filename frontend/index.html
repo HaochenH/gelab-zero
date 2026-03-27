@@ -34,16 +34,6 @@
         <section class="content-area">
             <div id="tab-dashboard" class="tab-content active">
 
-                <div class="input-card glass">
-                    <textarea id="task-input" placeholder=""></textarea>
-                    <div class="card-footer">
-                        <button id="run-btn" class="primary-btn">
-                            <span class="btn-text">Execute Task</span>
-                            <span class="btn-loader"></span>
-                        </button>
-                    </div>
-                </div>
-
                 <div id="execution-view" class="execution-view hidden">
                     <div class="status-banner glass">
                         <div class="status-msg">
@@ -69,6 +59,16 @@
                             <!-- Logs will be injected here -->
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="input-card glass">
+                <div class="input-row">
+                    <textarea id="task-input" placeholder=""></textarea>
+                    <button id="run-btn" class="primary-btn">
+                        <span class="btn-text">Execute Task</span>
+                        <span class="btn-loader"></span>
+                    </button>
                 </div>
             </div>
 

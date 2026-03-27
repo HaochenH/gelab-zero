@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let pollInterval = null;
     let lastLogCount = 0;
 
-    taskInput.placeholder = '描述你要执行的任务...例如："打开计算器应用并计算 100 + 200"';
+    taskInput.placeholder = '描述你要执行的任务...';
 
     loadHistory();
     checkStatusOnStartup();
@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         runBtn.disabled = true;
         runBtn.querySelector('.btn-text').textContent = 'Starting...';
+        taskInput.value = '';
         lastLogCount = 0;
         
         try {
