@@ -19,7 +19,7 @@ tmp_server_config = {
 local_model_config = {
     "task_type": "parser_0922_summary",
     "model_config": {
-        "model_name": "gelab-zero-4b-preview",
+        "model_name": "gelab-zero",
         "model_provider": "local",
         "args": {
             "temperature": 0.1,

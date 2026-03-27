@@ -42,7 +42,7 @@ SERVER_CONFIG = {
 MODEL_CONFIG = {
     "task_type": "parser_0922_summary",
     "model_config": {
-        "model_name": "gelab-zero-4b-preview",
+        "model_name": "gelab-zero",
         "model_provider": "local",
         "args": {
             "temperature": 0.1,
@@ -261,7 +261,7 @@ if __name__ == "__main__":
     import webbrowser
     from threading import Timer
     def open_browser():
-        webbrowser.open("http://127.0.0.1:8000")
+        webbrowser.open("http://127.0.0.1:8055")
     
     Timer(1.5, open_browser).start()
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8055)

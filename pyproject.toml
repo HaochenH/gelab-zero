@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "gelab-zero"
+version = "0.1.0"
+description = "AIGC 全链路自动化测试平台"
+authors = ["Gelab Team"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+megfile = ">=0.5.0,<6.0.0"
+opencv-python = "^4.8.0"
+jsonlines = "^4.0.0"
+pydantic = "^2.0.0"
+fastapi = "^0.104.0"
+uvicorn = { version = "^0.30.0", extras = ["standard"] }
+pymongo = "^4.5.0"
+openai = "0.28.0"
+pandas = "^2.0.0"
+Pillow = "^10.0.0"
+openpyxl = "^3.1.0"
+streamlit = "^1.28.0"
+tqdm = "^4.66.0"
+requests = "^2.31.0"
+pyyaml = "^6.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
