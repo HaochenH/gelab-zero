@@ -197,7 +197,7 @@ def _detect_screen_orientation(device_id):
         adb_command = f"adb -s {device_id}"
     if os.name == 'nt':
         # Windows
-        command = f'{adb_command}' + ''' shell dumpsys input | Select-String 'orientation=\d+' | Select -First 1 | % { $_.Matches.Value -replace 'orientation=', '' }'''
+        command = f'{adb_command}' + r''' shell dumpsys input | Select-String 'orientation=\d+' | Select -First 1 | % { $_.Matches.Value -replace 'orientation=', '' }'''
         
         # 使用 subprocess 运行 PowerShell 命令
         result = subprocess.run(
@@ -222,7 +222,7 @@ def _detect_screen_orientation(device_id):
     return result
 
 
-def act_on_device(frontend_action, device_id, wm_size, print_command = False, reflush_app = True):
+def act_on_device(frontend_action, device_id, wm_size, print_command = False, reflush_app = True, return_command = False):
     """
     Execute the frontend action on the device.
     1. # CLICK(point=(x,y))

@@ -200,10 +200,67 @@ class LocalServer(BaseCopilotServer):
 
         action = parser.str2action(response)
 
+        # Construct the actual command that will be executed
+        device_id = payload.get("device_id", "")
+        adb_base = f"adb -s {device_id}" if device_id else "adb"
+
+        command = ""
+        action_type = action.get("action_type") or action.get("action", "")
+
+        if action_type == "CLICK":
+            point = action.get("point", action.get("coordinates", []))
+            if point:
+                x, y = point[0], point[1]
+                command = f"{adb_base} shell input tap {x} {y}"
+        elif action_type == "LONGPRESS":
+            point = action.get("point", [])
+            duration = action.get("duration", 1.5)
+            if point:
+                x, y = point[0], point[1]
+                command = f"{adb_base} shell app_process -Djava.class.path=/data/local/tmp/yadb /data/local/tmp com.ysbing.yadb.Main -touch {x} {y} {int(duration * 1000)}"
+        elif action_type == "TYPE":
+            value = action.get("text", action.get("value", ""))
+            command = f"{adb_base} shell app_process -Djava.class.path=/data/local/tmp/yadb /data/local/tmp com.ysbing.yadb.Main -keyboard '{value}'"
+        elif action_type == "SCROLL":
+            point = action.get("point", [])
+            direction = action.get("direction", "down")
+            if point:
+                x, y = point[0], point[1]
+                if direction == "up":
+                    command = f"{adb_base} shell input swipe {x} {y} {x} {y-300}"
+                elif direction == "down":
+                    command = f"{adb_base} shell input swipe {x} {y} {x} {y+300}"
+                elif direction == "left":
+                    command = f"{adb_base} shell input swipe {x} {y} {x-300} {y}"
+                elif direction == "right":
+                    command = f"{adb_base} shell input swipe {x} {y} {x+300} {y}"
+        elif action_type == "AWAKE":
+            value = action.get("value", action.get("text", ""))
+            command = f"{adb_base} shell monkey -p {value} -c android.intent.category.LAUNCHER 1"
+        elif action_type == "SLIDE":
+            point1 = action.get("point1", [])
+            point2 = action.get("point2", [])
+            if point1 and point2:
+                x1, y1 = point1[0], point1[1]
+                x2, y2 = point2[0], point2[1]
+                command = f"{adb_base} shell input swipe {x1} {y1} {x2} {y2} 1200"
+        elif action_type == "BACK":
+            command = f"{adb_base} shell input keyevent 4"
+        elif action_type == "HOME":
+            command = f"{adb_base} shell input keyevent 3"
+        elif action_type == "WAIT":
+            seconds = action.get("seconds", action.get("duration", 1))
+            command = f"sleep {seconds}"
+        elif action_type == "HOT_KEY":
+            key = action.get("key", "")
+            key_events = {"volume_up": 24, "volume_down": 25, "power": 26, "home": 3, "back": 4, "menu": 82}
+            key_event = key_events.get(key.lower(), 3)
+            command = f"{adb_base} shell input keyevent {key_event}"
 
         log_message = {
             "environment": current_env,
             "action": action,
+            "command": command,
 
             "asked_messages": asked_messages,
             "model_response": response,

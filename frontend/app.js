@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progress-bar');
     const stepCounter = document.getElementById('step-counter');
     const statusBadge = document.getElementById('current-status-badge');
+    const commandBadge = document.getElementById('current-command-badge');
 
     let currentSessionId = null;
     let pollInterval = null;
@@ -27,10 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.status === 'running') {
                 currentSessionId = data.session_id;
                 taskInput.value = data.task_name;
-                
+
                 executionView.classList.remove('hidden');
                 stopBtn.classList.remove('hidden');
                 currentTaskName.textContent = data.task_name;
+                commandBadge.textContent = data.task_name;
                 logList.innerHTML = '';
                 statusBadge.textContent = 'Running';
                 statusBadge.className = 'badge running';
@@ -76,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             executionView.classList.remove('hidden');
             stopBtn.classList.remove('hidden');
             currentTaskName.textContent = task;
+            commandBadge.textContent = task;
             logList.innerHTML = '';
             if (progressBar) progressBar.style.width = '0%';
             stepCounter.textContent = 'Step 0';
@@ -138,22 +141,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function updateLogs() {
         if (!currentSessionId) return;
-        
+
         try {
             const response = await fetch(`/api/sessions/${currentSessionId}`);
             if (!response.ok) return;
             const logs = await response.json();
-            
+
             const currentLogCount = logs.length;
             if (currentLogCount === lastLogCount) return;
             lastLogCount = currentLogCount;
-            
+
             renderLogs(logs, logList, true);
-            
-            const steps = logs.length - 1; 
+
+            const steps = logs.length - 1;
             if (steps > 0) {
                 stepCounter.textContent = `Step ${steps}`;
                 if (progressBar) progressBar.style.width = `${Math.min(steps * 2.5, 95)}%`;
+            }
+
+            // Update command badge with latest command
+            if (logs.length > 1) {
+                const latestLog = logs[logs.length - 1];
+                const action = latestLog.message?.action;
+                if (action?.explain) {
+                    const command = action.explain.substring(0, 60);
+                    // Show task in badge, show command in title
+                    commandBadge.textContent = taskInput.value || 'No task';
+                    currentTaskName.textContent = command + (action.explain.length > 60 ? '...' : '');
+                }
             }
         } catch (err) {
             console.error('Log poll error:', err);
@@ -189,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
             }
-            
+
             if (msg.after_image_url) {
                 afterImageHtml = `
                     <div class="screenshot-container">
@@ -206,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             ` : '';
 
+            const command = msg.command || '';
+
             item.innerHTML = `
                 <div class="log-item-header">
                     <span class="step-num">#${stepNum}</span>
@@ -217,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="text-info">
                         <div class="explanation">${action.explain || 'Analyzing state...'}</div>
                         <div class="summary">${action.summary || ''}</div>
+                        ${command ? `<div class="command-line"><code>${command}</code></div>` : ''}
                     </div>
                 </div>
             `;

@@ -141,6 +141,7 @@ def evaluate_task_on_device(agent_server, device_info, task, rollout_config, ext
         
         payload = {
             "session_id": session_id,
+            "device_id": device_id,
             "observation": {
                 "screenshot": {
                     "type": "image_url",
